@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>История операций — Qwen</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:#10131a;color:#edf1f7;font:15px system-ui,sans-serif;padding:28px}
+    main{max-width:1000px;margin:0 auto}.muted{color:#9da9ba}h1{margin:8px 0 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    a{color:#dce9ff;text-decoration:none;background:#2b3443;padding:10px 14px;border-radius:9px}.table-wrap{overflow-x:auto;background:#1a202b;border:1px solid #303a4b;border-radius:14px}
+    table{border-collapse:collapse;width:100%;min-width:720px}th,td{text-align:left;padding:14px 16px;border-bottom:1px solid #303a4b}th{color:#aeb9c9;font-weight:600;background:#202836}tr:last-child td{border-bottom:0}.positive{color:#62d69a}.negative{color:#ff8585}.empty{text-align:center;padding:36px;color:#9da9ba}
+  </style>
+</head>
+<body>
+<main>
+  <div class="top"><div><p class="muted">Личный кабинет</p><h1>История операций</h1></div><a href="{{ url_for('balance_page') }}">К балансу</a></div>
+  <div class="table-wrap">
+    {% if transactions %}
+    <table>
+      <thead><tr><th>Дата</th><th>Операция</th><th>Сумма</th><th>Стоимость</th><th>Баланс после</th><th>Описание</th></tr></thead>
+      <tbody>
+      {% for tx in transactions %}
+        <tr>
+          <td>{{ tx.created_at.strftime('%d.%m.%Y %H:%M') if tx.created_at else '—' }}</td>
+          <td>{{ tx.type|e }}</td>
+          <td class="{{ 'positive' if tx.amount >= 0 else 'negative' }}">{{ '%+.2f'|format(tx.amount) }}</td>
+          <td>{{ '%.2f'|format(tx.cost or 0) }}</td>
+          <td>{{ '%.2f'|format(tx.balance_after) }}</td>
+          <td>{{ tx.description|e }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <div class="empty">Операций пока нет.</div>
+    {% endif %}
+  </div>
+</main>
+</body>
+</html>

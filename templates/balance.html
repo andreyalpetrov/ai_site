@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Баланс — Qwen</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:#10131a;color:#edf1f7;font:16px system-ui,sans-serif;display:grid;place-items:center;padding:24px}
+    .card{width:min(560px,100%);background:#1a202b;border:1px solid #303a4b;border-radius:20px;padding:30px;box-shadow:0 18px 60px #0005}
+    .muted{color:#9da9ba}.amount{font-size:clamp(38px,8vw,58px);font-weight:750;letter-spacing:-2px;margin:12px 0 6px}.unit{font-size:16px;color:#aab5c5;letter-spacing:0}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}a{display:inline-block;text-decoration:none;color:#eef5ff;background:#2d6cdf;padding:11px 16px;border-radius:10px;font-weight:600}a.secondary{background:#2b3443}
+    .note{margin-top:24px;padding:14px;background:#141a23;border-radius:12px;color:#aeb9c9;font-size:14px;line-height:1.5}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <p class="muted">Личный кабинет · {{ user.username|e }}</p>
+    <h1>Мой баланс</h1>
+    <div class="amount">{{ '%.2f'|format(user.balance or 0) }} <span class="unit">кредитов</span></div>
+    <p class="muted">Баланс хранится в базе данных и обновляется после операций.</p>
+    <div class="actions">
+      <a href="{{ url_for('transactions_page') }}">История операций</a>
+      <a class="secondary" href="{{ url_for('chat_page') }}">Вернуться в чат</a>
+    </div>
+    <div class="note">Стоимость одного запроса к нейросети задаётся параметром <code>CHAT_COST</code> в app.py. Пополнение в этой версии выполняется администратором непосредственно через MySQL.</div>
+  </main>
+</body>
+</html>
